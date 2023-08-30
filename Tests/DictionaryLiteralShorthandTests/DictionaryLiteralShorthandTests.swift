@@ -26,14 +26,14 @@ import XCTest
 import DictionaryLiteralShorthandMacros
 
 let testMacros: [String: Macro.Type] = [
-    "dictionaryLiteralShorthand": DictionaryLiteralShorthandMacro.self,
+    "dict": DictionaryLiteralShorthandMacro.self,
 ]
 
 final class DcardMacroTests: XCTestCase {
     func testMacroExpansion() {
         assertMacroExpansion(
             """
-            #dictionaryLiteralShorthand(a, b, c)
+            #dict(a, b, c)
             """,
             expandedSource: """
             ["a": a, "b": b, "c": c]
@@ -45,7 +45,7 @@ final class DcardMacroTests: XCTestCase {
     func testSingleInputMacroExpansionDoesNotContainTrailingComma() {
         assertMacroExpansion(
             """
-            #dictionaryLiteralShorthand(z)
+            #dict(z)
             """,
             expandedSource: """
             ["z": z]
@@ -55,10 +55,12 @@ final class DcardMacroTests: XCTestCase {
     }
     
     func testDuplicateIdentifierExpression() {
-        let spec: DiagnosticSpec = DiagnosticSpec(message: "There are duplicate identifiers in the input, this makes no difference to the expanded code.", line: 1, column: 32)
+        /// #dict(a, a, a, a, b)
+        ///          ^ line 1, column 10
+        let spec: DiagnosticSpec = DiagnosticSpec(message: "There are duplicate identifiers in the input, this makes no difference to the expanded code.", line: 1, column: 10)
         assertMacroExpansion(
             """
-            #dictionaryLiteralShorthand(a, a, a, a, b)
+            #dict(a, a, a, a, b)
             """,
             expandedSource: "",
             diagnostics: [

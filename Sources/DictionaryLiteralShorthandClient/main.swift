@@ -26,5 +26,5 @@ let a: Int = 17
 let b: Int = -25
 let c: String = "Foo"
 
-let dictionary: [AnyHashable : Any] = #dictionaryLiteralShorthand(a, b, c)
+let dictionary: [AnyHashable : Any] = #dict(a, a, a, a, b)
 print("Dictionary: \(dictionary)")
